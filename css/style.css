@@ -1,3 +1,35 @@
+* {
+
+	box-sizing: border-box;
+}
 html {
   overflow: auto;
+  padding: 0px;
+  margin: 0px;
+}
+body {
+	margin: 0px;
+	padding: 0px;
+}
+section {
+}
+.content {
+	padding: 20px;
+	padding-left: 10%;
+	padding-right: 10%;
+	border-bottom: 1px solid #dddddd;
+}
+.header {
+	height: 150px;
+	background: white;
+	border-bottom: 1px solid #dddddd;
+}
+.sdivider {
+	background: url('../img/sdivider.png');
+	height: 32px;
+	width: 100%;
+	padding-left: 10%;
+	font-weight: bold;
+	padding-top: 8px;
+	text-shadow: 0px 1px 0px white;
 }

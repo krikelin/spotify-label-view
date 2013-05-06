@@ -1,7 +1,8 @@
 {
   "AppDescription": {
-    "en": "My App"
+    "en": "Label"
   },
+  "UserInstallable": false,
   "AppIcon": {
     "18x18": "",
     "64x64": "",
@@ -9,9 +10,9 @@
     "300x300": ""
   },
   "AppName": {
-    "en": "Description of My App"
+    "en": "Label view for Spotify"
   },
-  "BundleIdentifier": "myapp",
+  "BundleIdentifier": "label",
   "BundleType": "Application",
   "BundleVersion": "0.0.1",
   "Dependencies": {

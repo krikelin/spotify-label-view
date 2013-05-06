@@ -7,14 +7,37 @@
     <!-- Include the stylesheets you need for the Views components -->
     <!-- See https://developer.spotify.com/technologies/apps/docs/preview/views/ -->
     <link rel="stylesheet" href="$views/css/image.css">
-    <!-- <link rel="stylesheet" href="$views/css/list.css">
+    <link rel="stylesheet" href="$views/css/list.css">
     <link rel="stylesheet" href="$views/css/buttons.css">
-    <link rel="stylesheet" href="$views/css/throbber.css"> -->
+    <link rel="stylesheet" href="$views/css/throbber.css">
+    <link rel="stylesheet" href="$views/css/tabbar.css">
     <link rel="stylesheet" href="css/style.css">
     <script src="http://d1hza3lyffsoht.cloudfront.net/preview-sdk/bootstrap.js"></script>
   </head>
   <body>
-    <h1>My app</h1>
+    <div id="header" class="header">
+      <table width="100%">
+        <tr>
+          <td class="air" width="10%"></td>
+          <td id="logo" width="128"></td>
+          <td valign="top">
+            <h2 data-template="{{label}}"></h2>
+            <div id="toolbar"></div>
+          </td>
+          <td class="air" width="10%"></td>
+        </tr>
+      </table>
+    </div>
+
+    <section id="overview">
+      <div class="sdivider">
+        <span data-string="top-list"></span>
+      </div>
+      <div class="content" id="lTopList"></div>
+      <div class="sdivider">
+        <span data-string="playlists"></span>
+      </div>
+    </section>
     <script src="scripts/main.js"></script>
   </body>
 </html>
