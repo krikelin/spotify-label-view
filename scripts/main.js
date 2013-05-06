@@ -12,7 +12,23 @@ require([
  	'sp://label/scripts/models'
 ], function(mainStrings, models, Image, TabBar, List, buttons, Search, PlayView, Library, omodels) {
   'use strict';
-  
+    function setSection(id) {
+      var sections = document.querySelectorAll('section');
+      for(var i = 0; i < sections.length; i++) {
+        var section = sections[i];
+        section.style.display = section.getAttribute('id') == id ? 'block' : 'none';
+      }
+    }
+    function clean() {
+      document.getElementById('lTopList').innerHTML = "";
+          document.getElementById('logo').innerHTML = "";
+          document.getElementById('playlists').innerHTML = "";
+
+          document.getElementById('toolbar').innerHTML = "";
+          document.getElementById('lArtists').innerHTML = "";
+
+          document.getElementById('l2Artists').innerHTML = "";
+    } 
       // We use the data-string attribute to localize elements
       var localizedElements = document.querySelectorAll('[data-string]');
       	for(var i = 0; i < localizedElements.length; i++) {
@@ -21,16 +37,16 @@ require([
       		elm.innerHTML = mainStrings.get(elm.dataset['string']);
       	}
       	var loadLabel = function (args) {
-          var label = omodels.Label.fromURI('spotify:label:krikelin');
+          if(args.length > 1) {
+
+            setSection(args[args.length-1]);
+          }
+          clean();
+          var label = omodels.Label.fromURI('spotify:label:' + args[0]);
           label.load('name', 'playlists', 'user', 'image').done(function (label) {
  
         		// Clean
-        		document.getElementById('lTopList').innerHTML = "";
-        		document.getElementById('logo').innerHTML = "";
-        		document.getElementById('playlists').innerHTML = "";
-
-        		document.getElementById('toolbar').innerHTML = "";
-        		document.getElementById('lArtists').innerHTML = "";
+        	
 
         		console.log(label.image);
 
@@ -78,11 +94,21 @@ require([
         		var lTopArtists = List.forCollection(label.artists, {throbber: 'hide-content', 'type': 'artists', 'style': 'rounded', 'header': 'no', 'numItems': 10, 'fields':['image', 'artist']});
         		document.getElementById('lArtists').appendChild(lTopArtists.node);
         		lTopArtists.init();
+
+            var artists = List.forCollection(label.artists, {throbber: 'hide-content', 'type': 'artists', 'style': 'rounded', 'header': 'no', 'fields':['image', 'artist'], 'numItems': 20})
+            document.getElementById("l2Artists").appendChild(artists.node);
+            artists.init();
           });
+          
       	};
       var tabBar = TabBar.withTabs([
-        {id: 'overview', name: 'Overview', active: true}
+        {id: 'overview', name: 'Overview', active: true},
+        {id: 'artists', name: 'Scouted Artists', active: true}
+        
       ]);
+       tabBar.addEventListener('tabchange', function(e) {
+        setSection(e.id);
+      });
       tabBar.addToDom(document.getElementById('header'), 'after');
       // Find items
       models.application.addEventListener('arguments', function () {

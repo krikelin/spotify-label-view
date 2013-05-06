@@ -52,28 +52,37 @@ require([
 						self.resolve('artists', search.artists);
 						if(typeof(json['label']) !== 'undefined') {
 							console.log(json);
-							if(json['label']['Label']['user'] != null) {
-								var user = models.User.fromURI('spotify:user:' + json['label']['Label']['user']);
-								if(user) {
-									user.load('name', 'image').done(function (user) {
-										self.resolve('user', user);
-										self.resolve('name', user.name);
-										// Get playlists for view
-							  			var library = Library.forUser(user);
-							  			library.load('published').done(function (library) {
-							  				console.log('t', library);
-							  				self.resolve('playlists', library.published);
-							  				self.resolveDone(); 
-							  			});
-							  			self.resolveDone(); 
-									});
+							if(json['label']['Label'] != null) {
+								if(json['label']['Label']['user'] != null) {
+									var user = models.User.fromURI('spotify:user:' + json['label']['Label']['user']);
+									if(user) {
+										user.load('name', 'image').done(function (user) {
+											self.resolve('user', user);
+											self.resolve('name', user.name);
+											// Get playlists for view
+								  			var library = Library.forUser(user);
+								  			library.load('published').done(function (library) {
+								  				console.log('t', library);
+								  				self.resolve('playlists', library.published);
+								  				self.resolveDone(); 
+								  			});
+								  			self.resolveDone(); 
+										});
+									} else {
+										self.resolve('image', 'img/label.png');
+										self.resolveDone(); 
+									}
 								} else {
 									self.resolve('image', 'img/label.png');
 									self.resolveDone(); 
 								}
 							} else {
 								self.resolve('image', 'img/label.png');
+								self.resolve('user', null);
+								self.resolve('name', labelId);
+								self.resolve('playlists', false);
 								self.resolveDone(); 
+								console.log('a');
 							}
 						} else {
 							self.resolve('image', 'img/label.png');
@@ -81,7 +90,9 @@ require([
 						}
 					}
 				};
-				xmlHttp.open("GET", "http://ws28.spotify.com/labels/view/" + labelId + ".json", true);
+				var url = "http://ws28.spotify.com/labels/view/" + labelId.replace(/\"/g, '') + ".json";
+				console.log(url);
+				xmlHttp.open("GET", url, true);
 				xmlHttp.send(null);
 			};
 		};
