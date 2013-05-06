@@ -30,14 +30,26 @@
     </div>
 
     <section id="overview">
-      <div class="sdivider">
-        <span data-string="top-list"></span>
-      </div>
-      <div class="content" id="lTopList"></div>
+     
+      <div class="content" >
+      <table width="100%">
+          <tr>
+            <td valign="top" width="75%">
+               <h2 data-string="top-list"></h2>
+               <div id="lTopList"></div>
+            </td>
+            <td width="25%" valign="top">
+              <h2 data-string="scouted-artists"></h2>
+              <div id="artists"></div>
+            </td>
+          </tr>
+        </table></div>
       <div class="sdivider">
         <span data-string="playlists"></span>
       </div>
       <div id="playlists" class="content"></div>
+    </section>
+    <section id="tracks">
     </section>
     <script src="scripts/main.js"></script>
   </body>
