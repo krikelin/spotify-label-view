@@ -1,4 +1,5 @@
 /**
+
 models
 @module
 **/
@@ -13,7 +14,7 @@ require([
 		@inherits Loadable
 		**/
 		exports.Label = function (uri) {
-			function getIdentifier(label) {
+			/*function getIdentifier(label) {
 			  	if(label == 'record union') {
 			  		return "recordunionmusic";
 			  	}
@@ -30,7 +31,7 @@ require([
 			  			return 'year:0-3000';
 			  		}
 			  		return 'label:' + label;
-		  	}
+		  	}*/
 			console.log("uri", uri);
 			this.uri = uri;
 			var self = this;
@@ -38,31 +39,50 @@ require([
 				throw "Invalid URI";
 			}
 			this._load = function (e) {
+				var xmlHttp = new XMLHttpRequest();
 				var labelId = this.uri.split(':')[2];
-				this.resolve('name', labelId);
-				this.resolve('image', 'img/label.png');
-				var search = Search.search(getSearch(labelId));
-				this.resolve('tracks', search.tracks);
-				this.resolve('albums', search.albums);
-				this.resolve('artists', search.artists);
-				var user = models.User.fromURI('spotify:user:' + getIdentifier(labelId));
-				if(user) {
-					user.load('name', 'image').done(function (user) {
-						self.resolve('user', user);
-						self.resolve('name', user.name);
-						// Get playlists for view
-			  			var library = Library.forUser(user);
-			  			library.load('published').done(function (library) {
-			  				console.log('t', library);
-			  				self.resolve('playlists', library.published);
-			  				self.resolveDone(); 
-			  			});
-			  			self.resolveDone(); 
-					});
-				} else {
-					self.resolve('image', 'img/label.png');
-					self.resolveDone(); 
-				}
+				xmlHttp.onreadystatechange = function () {
+					if(xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+						var json = eval("(" + xmlHttp.responseText + ")"); // TODO change this
+						self.resolve('name', labelId);
+						self.resolve('image', 'img/label.png');
+						var search = Search.search("label:" + labelId);
+						self.resolve('tracks', search.tracks);
+						self.resolve('albums', search.albums);
+						self.resolve('artists', search.artists);
+						if(typeof(json['label']) !== 'undefined') {
+							console.log(json);
+							if(json['label']['Label']['user'] != null) {
+								var user = models.User.fromURI('spotify:user:' + json['label']['Label']['user']);
+								if(user) {
+									user.load('name', 'image').done(function (user) {
+										self.resolve('user', user);
+										self.resolve('name', user.name);
+										// Get playlists for view
+							  			var library = Library.forUser(user);
+							  			library.load('published').done(function (library) {
+							  				console.log('t', library);
+							  				self.resolve('playlists', library.published);
+							  				self.resolveDone(); 
+							  			});
+							  			self.resolveDone(); 
+									});
+								} else {
+									self.resolve('image', 'img/label.png');
+									self.resolveDone(); 
+								}
+							} else {
+								self.resolve('image', 'img/label.png');
+								self.resolveDone(); 
+							}
+						} else {
+							self.resolve('image', 'img/label.png');
+							self.resolveDone(); 
+						}
+					}
+				};
+				xmlHttp.open("GET", "http://ws28.spotify.com/labels/view/" + labelId + ".json", true);
+				xmlHttp.send(null);
 			};
 		};
 		exports.Label.prototype = new models.Loadable();

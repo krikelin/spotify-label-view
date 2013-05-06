@@ -33,10 +33,12 @@ require([
 
 				var image = Image.forPlaylist(playlist, {placeholder: 'playlist', width: 128, player:true, height: 128});
 				td1.appendChild(image.node);
-				td2.innerHTML = "<span>" + playlist.name.decodeForText() + "<span><br />";
+				td2.innerHTML = '<a class="title" href="' + playlist.uri + '">' + playlist.name.decodeForText() + "</a><br /><br />";
 				var btnSubscribe = SubscribeButton.forPlaylist(playlist);
 				td2.appendChild(btnSubscribe.node);
-
+				td2.appendChild(document.createElement("br"));
+				td2.appendChild(document.createElement("br"));
+				
 				// Create playlist
 				var list = new List(playlist.tracks, {throbber: 'hide-content', numItems: 5, 'layout': 'toplist', style: 'rounded'});
 				td2.appendChild(list.node);

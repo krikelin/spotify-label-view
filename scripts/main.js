@@ -30,7 +30,7 @@ require([
         		document.getElementById('playlists').innerHTML = "";
 
         		document.getElementById('toolbar').innerHTML = "";
-        		document.getElementById('artists').innerHTML = "";
+        		document.getElementById('lArtists').innerHTML = "";
 
         		console.log(label.image);
 
@@ -76,7 +76,7 @@ require([
         		lTopList.focus();
 
         		var lTopArtists = List.forCollection(label.artists, {throbber: 'hide-content', 'type': 'artists', 'style': 'rounded', 'header': 'no', 'numItems': 10, 'fields':['image', 'artist']});
-        		document.getElementById('artists').appendChild(lTopArtists.node);
+        		document.getElementById('lArtists').appendChild(lTopArtists.node);
         		lTopArtists.init();
           });
       	};
