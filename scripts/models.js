@@ -66,7 +66,10 @@ require([
 			};
 		};
 		exports.Label.prototype = new models.Loadable();
-		models.Loadable.define(exports.Label, ['name', 'tracks', 'albums', 'playlists', 'image', 'artists'], '_load');
+		exports.Label.fromURI = function (uri) {
+			return new exports.Label(uri);
+		}
+		models.Loadable.define(exports.Label, ['name', 'tracks', 'albums', 'user', 'playlists', 'image', 'artists'], '_load');
 
 
 });

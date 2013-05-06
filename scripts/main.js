@@ -21,9 +21,9 @@ require([
       		elm.innerHTML = mainStrings.get(elm.dataset['string']);
       	}
       	var loadLabel = function (args) {
-          var label = new omodels.Label('spotify:label:krikelin');
-          label.load(['name', 'playlists', 'image']).done(function (label) {
-        	 alert("A");
+          var label = omodels.Label.fromURI('spotify:label:krikelin');
+          label.load('name', 'playlists', 'user', 'image').done(function (label) {
+ 
         		// Clean
         		document.getElementById('lTopList').innerHTML = "";
         		document.getElementById('logo').innerHTML = "";
@@ -32,13 +32,20 @@ require([
         		document.getElementById('toolbar').innerHTML = "";
         		document.getElementById('artists').innerHTML = "";
 
-        		
-      			var avatar = Image.fromSource(label.image, {width: 128, height: 128, style: 'rounded', 'placeholder': 'user', 'title': label.title});
-      			document.getElementById('logo').appendChild(avatar.node);
+        		console.log(label.image);
+
+      			var avatar = null;
+            if(label.user) {
+              avatar = Image.forUser(label.user, {width: 128, height: 128, style: 'rounded', 'placeholder': 'user', 'title': label.title});
+            } else {
+              avatar = Image.fromSource(label.image, {width: 128, height: 128, style: 'rounded', 'placeholder': 'user', 'title': label.title});
+      			}
+            console.log(avatar.node);
+            document.getElementById('logo').appendChild(avatar.node);
       			if(label.user) {
-      				document.getElementById("ltitle").innerHTML = mainStrings.get('title', user.name.decodeForText());
+      				document.getElementById("ltitle").innerHTML = mainStrings.get('title', label.name.decodeForText());
       			
-      			   var subscribeButton = buttons.SubscribeButton.forUser(user);
+      			   var subscribeButton = buttons.SubscribeButton.forUser(label.user);
       			   document.getElementById('toolbar').appendChild(subscribeButton.node);
             }
             if(label.playlists) {
